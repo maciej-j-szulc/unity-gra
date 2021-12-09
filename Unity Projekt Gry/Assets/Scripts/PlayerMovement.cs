@@ -27,19 +27,24 @@ public class PlayerMovement : MonoBehaviour
     {
         controller.Move(horizontalMove * Time.fixedDeltaTime, jump);
         jump = false;
+        if(GetComponent<Rigidbody2D>().transform.position.y <= -1f)
+        {
+            FindObjectOfType<GameManager>().GameOver();
+        }
     }
 
     public void OnLanding()
     {
-        Debug.Log("OnLanding()");
         animator.SetBool("isJumping", false);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.CompareTag("PickUp"))
+        if (collision.gameObject.CompareTag("Obstacle"))
         {
-            collision.gameObject.SetActive(false);
+            FindObjectOfType<GameManager>().GameOver();
         }
     }
 }
